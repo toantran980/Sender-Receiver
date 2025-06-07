@@ -46,11 +46,11 @@ string recvFileName()
 }
 
  /**
- * Sets up the shared memory segment and message queue
- * @param shmid - the id of the allocated shared memory 
- * @param msqid - the id of the shared memory
- * @param sharedMemPtr - the pointer to the shared memory
- */
+  * Sets up the shared memory segment and message queue
+  * @param shmid - the id of the allocated shared memory 
+  * @param msqid - the id of the shared memory
+  * @param sharedMemPtr - the pointer to the shared memory
+  */
 void init(int& shmid, int& msqid, void*& sharedMemPtr)
 {
 	
