@@ -40,7 +40,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	key_t key = ftok("keyfile.txt", 'a');
 	if (key == -1) 
 	{
-		cerr << "Fail to generate key from file\n";
+		cerr << "Failed to generate key from file\n";
 		exit(-1);
 	}
 
@@ -52,21 +52,21 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (shmid  == -1) 
 	{
-		cerr << "Fail to create shared memory segment\n";
+		cerr << "Failed to create shared memory segment\n";
 		exit(-1);
 	}
 
 	sharedMemPtr = shmat(shmid, NULL, 0);
 	if (sharedMemPtr == (void*)-1) 
 	{
-		cerr << "Fail to attach shared memory segment\n";
+		cerr << "Failed to attach shared memory segment\n";
 		exit(-1);
 	}
 
 	msqid = msgget(key, S_IRUSR | S_IWUSR);
 	if (msqid == -1) 
 	{
-		cerr << "Fail to attach message queue segment\n";
+		cerr << "Failed to attach message queue segment\n";
 		exit(-1);
 	}
 }
@@ -82,7 +82,7 @@ void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
 	/* TODO: Detach from shared memory */
 	if (shmdt(sharedMemPtr) == -1) 
 	{
-		cerr << "Fail to detach shared memory segment\n";
+		cerr << "Failed to detach shared memory segment\n";
 		exit(-1);
 	}
 }

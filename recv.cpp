@@ -37,7 +37,7 @@ string recvFileName()
 
     /* TODO: Receive the file name using msgrcv() */
 	if (msgrcv(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), FILE_NAME_TRANSFER_TYPE, 0) == -1) {
-		cerr << "Fail to receive file name message\n";
+		cerr << "Failed to receive file name message\n";
 		exit(-1);
 	}
 	
@@ -68,7 +68,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	key_t key = ftok("keyfile.txt", 'a');
 	if (key == -1) 
 	{
-		cerr << "Fail to generate key from file\n";
+		cerr << "Failed to generate key from file\n";
 		exit(-1);
 	}
 	
@@ -77,7 +77,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (shmid == -1) 
 	{
-		cerr << "Fail to create shared memory segment\n";
+		cerr << "Failed to create shared memory segment\n";
 		exit(-1);
 	}
 	
@@ -85,7 +85,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	sharedMemPtr = shmat(shmid, NULL, 0);
 	if (sharedMemPtr == (void*)-1) 
 	{
-		cerr << "Fail to attach shared memory segment\n";
+		cerr << "Failed to attach shared memory segment\n";
 		exit(-1);
 	}
 	
@@ -93,7 +93,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	msqid = msgget(key, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (msqid == -1) 
 	{
-		cerr << "Fail to create message queue segment\n";
+		cerr << "Failed to create message queue segment\n";
 		exit(-1);
 	}
 	
@@ -117,7 +117,7 @@ unsigned long mainLoop(const char* fileName)
 	string recvFileNameStr = fileName;
 	
 	/* TODO: append __recv to the end of file name */
-	recvFileNameStr += "__recv";
+	recvFileNameStr += "_recv";
 	
 	/* Open the file for writing */
 	FILE* fp = fopen(recvFileNameStr.c_str(), "w");
@@ -150,7 +150,7 @@ unsigned long mainLoop(const char* fileName)
 		message rcvMsg;
 		if (msgrcv(msqid, &rcvMsg, sizeof(message) - sizeof(long), SENDER_DATA_TYPE, 0) == -1)
 		{
-			cerr << "Fail to receive message\n";
+			cerr << "Failed to receive message\n";
 			exit(-1);
 		}
 		
@@ -176,7 +176,7 @@ unsigned long mainLoop(const char* fileName)
 			sndMsg.mtype = RECV_DONE_TYPE;
 			if (msgsnd(msqid, &sndMsg, sizeof(ackMessage) - sizeof(long), 0) == -1)
 			{
-				cerr << "Fail to send done message\n";
+				cerr << "Failed to send done message\n";
 				exit(-1);
 			}
 		}
@@ -202,21 +202,21 @@ void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
 	/* TODO: Detach from shared memory */
 	if (shmdt(sharedMemPtr) == -1) 
 	{
-		cerr << "Fail to detach shared memory segment\n";
+		cerr << "Failed to detach shared memory segment\n";
 		exit(-1);
 	}
 	
 	/* TODO: Deallocate the shared memory segment */
 	if (shmctl(shmid, IPC_RMID, NULL) == -1) 
 	{
-		cerr << "Fail to deallocate shared memory segment\n";
+		cerr << "Failed to deallocate shared memory segment\n";
 		exit(-1);
 	}
 	
 	/* TODO: Deallocate the message queue */
 	if (msgctl(msqid, IPC_RMID, NULL) == -1) 
 	{
-		cerr << "Fail to deallocate message queue\n";
+		cerr << "Failed to deallocate message queue\n";
 		exit(-1);
 	}
 }
@@ -241,7 +241,7 @@ int main(int argc, char** argv)
  	 */
 	if (signal(SIGINT, ctrlCSignal) == SIG_ERR) 
 	{
-		cerr << "Fail to install signal handler\n";
+		cerr << "Failed to install signal handler\n";
 		exit(-1);
 	}
 			
