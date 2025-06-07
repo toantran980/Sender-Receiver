@@ -1,1 +1,1 @@
-Sender & Receiver
+Sender and Receiver
