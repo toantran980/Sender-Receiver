@@ -27,16 +27,15 @@ void* sharedMemPtr;
 void init(int& shmid, int& msqid, void*& sharedMemPtr)
 {
 	/* TODO: 
-    1. Create a file called keyfile.txt containing string "Hello world" (you may do
+     1. Create a file called keyfile.txt containing string "Hello world" (you may do
  	    so manually or from the code).
-	2. Use ftok("keyfile.txt", 'a') in order to generate the key.
-	3. Use will use this key in the TODO's below. Use the same key for the queue
+	 2. Use ftok("keyfile.txt", 'a') in order to generate the key.
+	 3. Use will use this key in the TODO's below. Use the same key for the queue
 	   and the shared memory segment. This also serves to illustrate the difference
  	   between the key and the id used in message queues and shared memory. The key is
 	   like the file name and the id is like the file object.  Every System V object 
 	   on the system has a unique id, but different objects may have the same key.
 	*/
-
 	key_t key = ftok("keyfile.txt", 'a');
 	if (key == -1) 
 	{
@@ -48,7 +47,6 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	/* TODO: Attach to the shared memory */
 	/* TODO: Attach to the message queue */
 	/* Store the IDs and the pointer to the shared memory region in the corresponding function parameters */
-
 	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (shmid  == -1) 
 	{
@@ -94,7 +92,6 @@ void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
  */
 unsigned long sendFile(const char* fileName)
 {
-
 	/* A buffer to store message we will send to the receiver. */
 	message sndMsg; 
 	
@@ -134,7 +131,6 @@ unsigned long sendFile(const char* fileName)
 		/* TODO: Send a message to the receiver telling him that the data is ready
  		 * to be read (message of type SENDER_DATA_TYPE).
  		 */
-		
 		sndMsg.mtype = SENDER_DATA_TYPE;
 		if (msgsnd(msqid, &sndMsg, sizeof(message) - sizeof(long), 0) == -1)
 		{
@@ -145,7 +141,6 @@ unsigned long sendFile(const char* fileName)
 		/* TODO: Wait until the receiver sends us a message of type RECV_DONE_TYPE telling us 
  		 * that he finished saving a chunk of memory. 
  		 */
-		
 		if (msgrcv(msqid, &rcvMsg, sizeof(ackMessage) - sizeof(long), RECV_DONE_TYPE, 0) == -1)
 		{
 			cerr << "Failed to receive message\n";
@@ -157,9 +152,9 @@ unsigned long sendFile(const char* fileName)
  	  * Lets tell the receiver that we have nothing more to send. We will do this by
  	  * sending a message of type SENDER_DATA_TYPE with size field set to 0. 	
 	  */
-
 	sndMsg.mtype = SENDER_DATA_TYPE;
 	sndMsg.size = 0;
+
 	if (msgsnd(msqid, &sndMsg, sizeof(message) - sizeof(long), 0) == -1)
 	{
 		cerr << "Failed to send end of file message\n";
@@ -185,7 +180,8 @@ void sendFileName(const char* fileName)
 	 * the maximum buffer size in the fileNameMsg
 	 * struct. If exceeds, then terminate with an error.
 	 */
-	if (fileNameSize >= MAX_FILE_NAME_SIZE) {
+	if (fileNameSize >= MAX_FILE_NAME_SIZE) 
+	{
 		cerr << "File name exceeds maximum size of " << MAX_FILE_NAME_SIZE << " characters.\n";
 		exit(-1);
 	}
@@ -202,7 +198,8 @@ void sendFileName(const char* fileName)
 	strncpy(fileNameMessage.fileName, fileName, fileNameSize);
 	
 	/* TODO: Send the message using msgsnd */
-	if (msgsnd(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), 0) == -1) {
+	if (msgsnd(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), 0) == -1) 
+	{
 		cerr << "Failed to send file name message\n";
 		exit(-1);
 	}
