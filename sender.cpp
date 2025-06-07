@@ -27,8 +27,8 @@ void* sharedMemPtr;
 void init(int& shmid, int& msqid, void*& sharedMemPtr)
 {
 	/* TODO: 
-         1. Create a file called keyfile.txt containing string "Hello world" (you may do
- 	    so manually or from the code).
+     1. Create a file called keyfile.txt containing string "Hello world" (you may do 
+	    so manually or from the code).
 	 2. Use ftok("keyfile.txt", 'a') in order to generate the key.
 	 3. Use will use this key in the TODO's below. Use the same key for the queue
 	   and the shared memory segment. This also serves to illustrate the difference
@@ -148,10 +148,10 @@ unsigned long sendFile(const char* fileName)
 		}
 	}
 	
-	/** TODO: once we are out of the above loop, we have finished sending the file.
- 	  * Lets tell the receiver that we have nothing more to send. We will do this by
- 	  * sending a message of type SENDER_DATA_TYPE with size field set to 0. 	
-	  */
+	/* TODO: once we are out of the above loop, we have finished sending the file.
+ 	 * Lets tell the receiver that we have nothing more to send. We will do this by
+ 	 * sending a message of type SENDER_DATA_TYPE with size field set to 0. 	
+	 */
 	sndMsg.mtype = SENDER_DATA_TYPE;
 	sndMsg.size = 0;
 
@@ -219,7 +219,7 @@ int main(int argc, char** argv)
 	init(shmid, msqid, sharedMemPtr);
 	
 	/* Send the name of the file */
-        sendFileName(argv[1]);
+    sendFileName(argv[1]);
 		
 	/* Send the file */
 	fprintf(stderr, "The number of bytes sent is %lu\n", sendFile(argv[1]));
