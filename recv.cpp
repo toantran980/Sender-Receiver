@@ -31,10 +31,10 @@ string recvFileName()
         
 	/* TODO: declare an instance of the fileNameMsg struct to be
 	 * used for holding the message received from the sender.
-     */
+         */
 	fileNameMsg fileNameMessage;
 
-    /* TODO: Receive the file name using msgrcv() */
+        /* TODO: Receive the file name using msgrcv() */
 	if (msgrcv(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), FILE_NAME_TRANSFER_TYPE, 0) == -1) {
 		cerr << "Failed to receive file name message\n";
 		exit(-1);
