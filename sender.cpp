@@ -155,7 +155,7 @@ unsigned long sendFile(const char* fileName)
 	sndMsg.mtype = SENDER_DATA_TYPE;
 	sndMsg.size = 0;
 
-	if (msgsnd(msqid, &sndMsg, sizeof(message) - sizeof(long), 0) == -1)
+	if (msgsnd(msqid, &sndMsg, sizeof(sndMsg.size), 0) == -1)
 	{
 		cerr << "Failed to send end of file message\n";
 		exit(-1);
