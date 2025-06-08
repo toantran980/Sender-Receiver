@@ -173,7 +173,7 @@ unsigned long mainLoop(const char* fileName)
  			 */
 			ackMessage sndMsg;
 			sndMsg.mtype = RECV_DONE_TYPE;
-			if (msgsnd(msqid, &sndMsg, sizeof(ackMessage) - sizeof(long), 0) == -1)
+			if (msgsnd(msqid, &sndMsg, 0, 0) == -1)
 			{
 				cerr << "Failed to send done message\n";
 				exit(-1);
