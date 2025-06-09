@@ -28,7 +28,7 @@ string recvFileName()
 {
 	/* The file name received from the sender */
 	string fileName;
-        
+
 	/* TODO: declare an instance of the fileNameMsg struct to be
 	 * used for holding the message received from the sender.
          */
@@ -64,13 +64,13 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	   like the file name and the id is like the file object.  Every System V object 
 	   on the system has a unique id, but different objects may have the same key.
 	*/
+	cout << "Initializing receiver..." << endl;
 	key_t key = ftok("keyfile.txt", 'a');
 	if (key == -1) 
 	{
 		perror("ftok");
 		exit(-1);
 	}
-	cout << "Initializing sender with key: " << key << endl;
 	
 	/* TODO: Allocate a shared memory segment. The size of the segment must be SHARED_MEMORY_CHUNK_SIZE. */
 	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, S_IRUSR | S_IWUSR | IPC_CREAT);
@@ -95,6 +95,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 		perror("msgget");
 		exit(-1);
 	}
+	cout << "Receiver initialized with key: " << key << endl;
 	
 	/* TODO: Store the IDs and the pointer to the shared memory region in the corresponding parameters */
 }
@@ -127,7 +128,7 @@ unsigned long mainLoop(const char* fileName)
 		perror("fopen");	
 		exit(-1);
 	}
-		
+	cout << "Receiving file: " << recvFileNameStr << endl;
 
 	/* Keep receiving until the sender sets the size to 0, indicating that
  	 * there is no more data to send.
@@ -152,6 +153,7 @@ unsigned long mainLoop(const char* fileName)
 			perror("msgrcv");
 			exit(-1);
 		}
+		cout << "Received message" << endl;
 		
 		/* If the sender is not telling us that we are done, then get to work */
 		msgSize = rcvMsg.size;
@@ -186,7 +188,8 @@ unsigned long mainLoop(const char* fileName)
 			fclose(fp);
 		}
 	}
-	
+	cout << "File transfer completed" << endl;
+
 	return numBytesRecv;
 }
 
@@ -218,6 +221,7 @@ void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
 		perror("msgctl");
 		exit(-1);
 	}
+	cout << "Successfully cleaned up resources" << endl;
 }
 
 /**
@@ -228,6 +232,8 @@ void ctrlCSignal(int signal)
 {
 	/* Free system V resources */
 	cleanUp(shmid, msqid, sharedMemPtr);
+	cout << "Cleaned up resources and exiting." << endl;
+	exit(0);
 }
 
 int main(int argc, char** argv)

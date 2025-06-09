@@ -43,6 +43,8 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 		exit(-1);
 	}
 
+	cout << "Initializing sender with key: " << key << endl;
+
 	/* TODO: Get the id of the shared memory segment. The size of the segment must be SHARED_MEMORY_CHUNK_SIZE */
 	/* TODO: Attach to the shared memory */
 	/* TODO: Attach to the message queue */
@@ -67,6 +69,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 		perror("msgget");
 		exit(-1);
 	}
+	cout << "Shared memory and message queue initialized successfully" << endl;
 }
 
 /**
@@ -83,6 +86,7 @@ void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
 		perror("shmdt");
 		exit(-1);
 	}
+	cout << "Successfully cleanup from shared memory" << endl;
 }
 
 /**
@@ -119,6 +123,8 @@ unsigned long sendFile(const char* fileName)
 		 * actually read. This is important; the last chunk read may be less than
 		 * SHARED_MEMORY_CHUNK_SIZE.
  		 */
+		cout << "Reading from file: " << fileName << endl;
+		cout << "Start sending data..." << endl;
 		if((sndMsg.size = fread(sharedMemPtr, sizeof(char), SHARED_MEMORY_CHUNK_SIZE, fp)) < 0)
 		{
 			perror("fread");
@@ -146,6 +152,7 @@ unsigned long sendFile(const char* fileName)
 			perror("msgrcv");
 			exit(-1);
 		}
+		cout << "File chunk sent, waiting for receiver to finish saving..." << endl;
 	}
 	
 	/* TODO: once we are out of the above loop, we have finished sending the file.
@@ -163,6 +170,7 @@ unsigned long sendFile(const char* fileName)
 
 	/* Close the file */
 	fclose(fp);
+	cout << "File transfer completed" << endl;
 	
 	return numBytesSent;
 }
@@ -173,6 +181,8 @@ unsigned long sendFile(const char* fileName)
  */
 void sendFileName(const char* fileName)
 {
+	cout << "Sending file name: " << fileName << endl;
+
 	/* Get the length of the file name */
 	int fileNameSize = strlen(fileName);
 
@@ -196,6 +206,7 @@ void sendFileName(const char* fileName)
 
 	/* TODO: Set the file name in the message */
 	strncpy(fileNameMessage.fileName, fileName, fileNameSize);
+	fileNameMessage.fileName[fileNameSize] = '\0';
 	
 	/* TODO: Send the message using msgsnd */
 	if (msgsnd(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), 0) == -1) 
@@ -203,6 +214,8 @@ void sendFileName(const char* fileName)
 		perror("msgsnd");
 		exit(-1);
 	}
+	cout << "File name sent successfully" << endl;
+
 }
 
 int main(int argc, char** argv)
