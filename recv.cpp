@@ -36,7 +36,7 @@ string recvFileName()
 
         /* TODO: Receive the file name using msgrcv() */
 	if (msgrcv(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), FILE_NAME_TRANSFER_TYPE, 0) == -1) {
-		cerr << "Failed to receive file name message\n";
+		perror("msgrcv");
 		exit(-1);
 	}
 	
@@ -67,16 +67,16 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	key_t key = ftok("keyfile.txt", 'a');
 	if (key == -1) 
 	{
-		cerr << "Failed to generate key from file\n";
+		perror("ftok");
 		exit(-1);
 	}
+	cout << "Initializing sender with key: " << key << endl;
 	
-
 	/* TODO: Allocate a shared memory segment. The size of the segment must be SHARED_MEMORY_CHUNK_SIZE. */
 	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (shmid == -1) 
 	{
-		cerr << "Failed to create shared memory segment\n";
+		perror("shmget");
 		exit(-1);
 	}
 	
@@ -84,7 +84,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	sharedMemPtr = shmat(shmid, NULL, 0);
 	if (sharedMemPtr == (void*)-1) 
 	{
-		cerr << "Failed to attach shared memory segment\n";
+		perror("shmat");
 		exit(-1);
 	}
 	
@@ -92,7 +92,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	msqid = msgget(key, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (msqid == -1) 
 	{
-		cerr << "Failed to create message queue segment\n";
+		perror("msgget");
 		exit(-1);
 	}
 	
@@ -149,7 +149,7 @@ unsigned long mainLoop(const char* fileName)
 		message rcvMsg;
 		if (msgrcv(msqid, &rcvMsg, sizeof(message) - sizeof(long), SENDER_DATA_TYPE, 0) == -1)
 		{
-			cerr << "Failed to receive message\n";
+			perror("msgrcv");
 			exit(-1);
 		}
 		
@@ -175,7 +175,7 @@ unsigned long mainLoop(const char* fileName)
 			sndMsg.mtype = RECV_DONE_TYPE;
 			if (msgsnd(msqid, &sndMsg, 0, 0) == -1)
 			{
-				cerr << "Failed to send done message\n";
+				perror("msgsnd");
 				exit(-1);
 			}
 		}
@@ -201,21 +201,21 @@ void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
 	/* TODO: Detach from shared memory */
 	if (shmdt(sharedMemPtr) == -1) 
 	{
-		cerr << "Failed to detach shared memory segment\n";
+		perror("shmdt");
 		exit(-1);
 	}
 	
 	/* TODO: Deallocate the shared memory segment */
 	if (shmctl(shmid, IPC_RMID, NULL) == -1) 
 	{
-		cerr << "Failed to deallocate shared memory segment\n";
+		perror("shmctl");
 		exit(-1);
 	}
 	
 	/* TODO: Deallocate the message queue */
 	if (msgctl(msqid, IPC_RMID, NULL) == -1) 
 	{
-		cerr << "Failed to deallocate message queue\n";
+		perror("msgctl");
 		exit(-1);
 	}
 }

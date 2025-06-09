@@ -39,7 +39,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	key_t key = ftok("keyfile.txt", 'a');
 	if (key == -1) 
 	{
-		cerr << "Failed to generate key from file\n";
+		perror("ftok");
 		exit(-1);
 	}
 
@@ -50,21 +50,21 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (shmid  == -1) 
 	{
-		cerr << "Failed to create shared memory segment\n";
+		perror("shmget");
 		exit(-1);
 	}
 
 	sharedMemPtr = shmat(shmid, NULL, 0);
 	if (sharedMemPtr == (void*)-1) 
 	{
-		cerr << "Failed to attach shared memory segment\n";
+		perror("shmat");
 		exit(-1);
 	}
 
 	msqid = msgget(key, S_IRUSR | S_IWUSR);
 	if (msqid == -1) 
 	{
-		cerr << "Failed to attach message queue segment\n";
+		perror("msgget");
 		exit(-1);
 	}
 }
@@ -80,7 +80,7 @@ void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
 	/* TODO: Detach from shared memory */
 	if (shmdt(sharedMemPtr) == -1) 
 	{
-		cerr << "Failed to detach shared memory segment\n";
+		perror("shmdt");
 		exit(-1);
 	}
 }
@@ -134,7 +134,7 @@ unsigned long sendFile(const char* fileName)
 		sndMsg.mtype = SENDER_DATA_TYPE;
 		if (msgsnd(msqid, &sndMsg, sizeof(message) - sizeof(long), 0) == -1)
 		{
-			cerr << "Failed to send message\n";
+			perror("msgsnd");
 			exit(-1);
 		}
 
@@ -143,7 +143,7 @@ unsigned long sendFile(const char* fileName)
  		 */
 		if (msgrcv(msqid, &rcvMsg, sizeof(ackMessage) - sizeof(long), RECV_DONE_TYPE, 0) == -1)
 		{
-			cerr << "Failed to receive message\n";
+			perror("msgrcv");
 			exit(-1);
 		}
 	}
@@ -157,7 +157,7 @@ unsigned long sendFile(const char* fileName)
 
 	if (msgsnd(msqid, &sndMsg, sizeof(message) - sizeof(long), 0) == -1)
 	{
-		cerr << "Failed to send end of file message\n";
+		perror("msgsnd");
 		exit(-1);
 	}
 
@@ -180,7 +180,7 @@ void sendFileName(const char* fileName)
 	 * the maximum buffer size in the fileNameMsg
 	 * struct. If exceeds, then terminate with an error.
 	 */
-	if (fileNameSize >= MAX_FILE_NAME_SIZE) 
+	if (fileNameSize > MAX_FILE_NAME_SIZE) 
 	{
 		cerr << "File name exceeds maximum size of " << MAX_FILE_NAME_SIZE << " characters.\n";
 		exit(-1);
@@ -200,7 +200,7 @@ void sendFileName(const char* fileName)
 	/* TODO: Send the message using msgsnd */
 	if (msgsnd(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), 0) == -1) 
 	{
-		cerr << "Failed to send file name message\n";
+		perror("msgsnd");
 		exit(-1);
 	}
 }
