@@ -42,6 +42,7 @@ string recvFileName()
 	
 	/* TODO: return the received file name */
 	fileName = fileNameMessage.fileName;
+	cout << "Received file name: " << fileName << endl;
     return fileName;
 }
 
@@ -128,7 +129,8 @@ unsigned long mainLoop(const char* fileName)
 		perror("fopen");	
 		exit(-1);
 	}
-	cout << "Receiving file: " << recvFileNameStr << endl;
+	cout << "Converting file: " << fileName << " to " << recvFileNameStr << endl;
+	cout << "Start receiving data..." << endl;
 
 	/* Keep receiving until the sender sets the size to 0, indicating that
  	 * there is no more data to send.
