@@ -238,11 +238,7 @@ int main(int argc, char** argv)
  	 * queue and the shared memory segment before exiting. You may add 
 	 * the cleaning functionality in ctrlCSignal().
  	 */
-	if (signal(SIGINT, ctrlCSignal) == SIG_ERR) 
-	{
-		cerr << "Failed to install signal handler\n";
-		exit(-1);
-	}
+	signal(SIGINT, ctrlCSignal); 
 			
 	/* Initialize */
 	init(shmid, msqid, sharedMemPtr);
