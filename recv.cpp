@@ -28,7 +28,7 @@ string recvFileName()
 {
 	/* The file name received from the sender */
 	string fileName;
-        
+
 	/* TODO: declare an instance of the fileNameMsg struct to be
 	 * used for holding the message received from the sender.
          */
@@ -36,12 +36,13 @@ string recvFileName()
 
         /* TODO: Receive the file name using msgrcv() */
 	if (msgrcv(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), FILE_NAME_TRANSFER_TYPE, 0) == -1) {
-		cerr << "Failed to receive file name message\n";
+		perror("msgrcv");
 		exit(-1);
 	}
 	
 	/* TODO: return the received file name */
 	fileName = fileNameMessage.fileName;
+	cout << "Received file name: " << fileName << endl;
     return fileName;
 }
 
@@ -64,19 +65,19 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	   like the file name and the id is like the file object.  Every System V object 
 	   on the system has a unique id, but different objects may have the same key.
 	*/
+	cout << "Initializing receiver..." << endl;
 	key_t key = ftok("keyfile.txt", 'a');
 	if (key == -1) 
 	{
-		cerr << "Failed to generate key from file\n";
+		perror("ftok");
 		exit(-1);
 	}
 	
-
 	/* TODO: Allocate a shared memory segment. The size of the segment must be SHARED_MEMORY_CHUNK_SIZE. */
 	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (shmid == -1) 
 	{
-		cerr << "Failed to create shared memory segment\n";
+		perror("shmget");
 		exit(-1);
 	}
 	
@@ -84,7 +85,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	sharedMemPtr = shmat(shmid, NULL, 0);
 	if (sharedMemPtr == (void*)-1) 
 	{
-		cerr << "Failed to attach shared memory segment\n";
+		perror("shmat");
 		exit(-1);
 	}
 	
@@ -92,9 +93,10 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	msqid = msgget(key, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (msqid == -1) 
 	{
-		cerr << "Failed to create message queue segment\n";
+		perror("msgget");
 		exit(-1);
 	}
+	cout << "Receiver initialized with key: " << key << endl;
 	
 	/* TODO: Store the IDs and the pointer to the shared memory region in the corresponding parameters */
 }
@@ -127,7 +129,8 @@ unsigned long mainLoop(const char* fileName)
 		perror("fopen");	
 		exit(-1);
 	}
-		
+	cout << "Converting file: " << fileName << " to " << recvFileNameStr << endl;
+	cout << "Start receiving data..." << endl;
 
 	/* Keep receiving until the sender sets the size to 0, indicating that
  	 * there is no more data to send.
@@ -149,9 +152,10 @@ unsigned long mainLoop(const char* fileName)
 		message rcvMsg;
 		if (msgrcv(msqid, &rcvMsg, sizeof(message) - sizeof(long), SENDER_DATA_TYPE, 0) == -1)
 		{
-			cerr << "Failed to receive message\n";
+			perror("msgrcv");
 			exit(-1);
 		}
+		cout << "Received message" << endl;
 		
 		/* If the sender is not telling us that we are done, then get to work */
 		msgSize = rcvMsg.size;
@@ -175,7 +179,7 @@ unsigned long mainLoop(const char* fileName)
 			sndMsg.mtype = RECV_DONE_TYPE;
 			if (msgsnd(msqid, &sndMsg, 0, 0) == -1)
 			{
-				cerr << "Failed to send done message\n";
+				perror("msgsnd");
 				exit(-1);
 			}
 		}
@@ -186,7 +190,8 @@ unsigned long mainLoop(const char* fileName)
 			fclose(fp);
 		}
 	}
-	
+	cout << "File transfer completed" << endl;
+
 	return numBytesRecv;
 }
 
@@ -201,23 +206,24 @@ void cleanUp(const int& shmid, const int& msqid, void* sharedMemPtr)
 	/* TODO: Detach from shared memory */
 	if (shmdt(sharedMemPtr) == -1) 
 	{
-		cerr << "Failed to detach shared memory segment\n";
+		perror("shmdt");
 		exit(-1);
 	}
 	
 	/* TODO: Deallocate the shared memory segment */
 	if (shmctl(shmid, IPC_RMID, NULL) == -1) 
 	{
-		cerr << "Failed to deallocate shared memory segment\n";
+		perror("shmctl");
 		exit(-1);
 	}
 	
 	/* TODO: Deallocate the message queue */
 	if (msgctl(msqid, IPC_RMID, NULL) == -1) 
 	{
-		cerr << "Failed to deallocate message queue\n";
+		perror("msgctl");
 		exit(-1);
 	}
+	cout << "Successfully cleaned up resources" << endl;
 }
 
 /**
@@ -228,6 +234,8 @@ void ctrlCSignal(int signal)
 {
 	/* Free system V resources */
 	cleanUp(shmid, msqid, sharedMemPtr);
+	cout << "Cleaned up resources and exiting." << endl;
+	exit(0);
 }
 
 int main(int argc, char** argv)
@@ -238,11 +246,7 @@ int main(int argc, char** argv)
  	 * queue and the shared memory segment before exiting. You may add 
 	 * the cleaning functionality in ctrlCSignal().
  	 */
-	if (signal(SIGINT, ctrlCSignal) == SIG_ERR) 
-	{
-		cerr << "Failed to install signal handler\n";
-		exit(-1);
-	}
+	signal(SIGINT, ctrlCSignal); 
 			
 	/* Initialize */
 	init(shmid, msqid, sharedMemPtr);
