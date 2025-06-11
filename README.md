@@ -2,6 +2,8 @@
   
   **Overview**: Implementation of two programs, a `sender.cpp` and `receiver.cpp` program, which synchronously transfers files between two processes using our knowledge of shared memory and message queues.
 
+  - Programming language used: C++
+
 
 ## Team Members:
 
