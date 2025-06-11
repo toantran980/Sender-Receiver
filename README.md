@@ -24,6 +24,7 @@
  4. Afterward, open a separate terminal window and type `g++ sender.cpp -o sender` & enter
  5. Finally, type `./sender` & enter
 
+ ![Screenshot of Testing](/~/Pictures/Screenshots/scshex.png "Testing Example")
 
 ## Contributions
 
