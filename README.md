@@ -30,7 +30,7 @@
  
  - *Below is a screenshot testing our program when it compiles:*
 
- ![Screenshot of Testing](scsh_ex.png "Testing Example")
+ ![Screenshot of Testing](scsh_test.png "Testing Example")
 
 
 ## Contributions
