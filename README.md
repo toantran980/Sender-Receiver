@@ -23,8 +23,11 @@
  3. Then, type `./recv` & enter (don't terminate program)
  4. Afterward, open a separate terminal window and type `g++ sender.cpp -o sender` & enter
  5. Finally, type `./sender` & enter
+ 
+ *Below is a testing screenshot of when our program compiles:*
 
  ![Screenshot of Testing](scshex.png "Testing Example")
+
 
 ## Contributions
 
