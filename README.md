@@ -14,6 +14,8 @@
 
 
 ## To Compile:
+ 
+ - This program compiles in a linux environment:
 
  > Beforehand, make sure to have `make` and `g++` insalled.
  > If they're not installed, type `sudo apt install` followed by `make` and `g++`.
@@ -24,7 +26,7 @@
  4. Afterward, open a separate terminal window and type `g++ sender.cpp -o sender` & enter
  5. Finally, type `./sender` & enter
  
- *Below is a screenshot testing our program when it compiles:*
+ - *Below is a screenshot testing our program when it compiles:*
 
  **![Screenshot of Testing](scshex.png "Testing Example")**
 
