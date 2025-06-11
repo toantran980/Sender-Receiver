@@ -1,6 +1,6 @@
 # Project 1 - Sender & Receiver
   
-  *Overview*: Implementation of two programs, a `sender.cpp` and `receiver.cpp` program, which synchronously transfers files between two process using our knowledge of shared memory and message queues.
+  **Overview**: Implementation of two programs, a `sender.cpp` and `receiver.cpp` program, which synchronously transfers files between two processes using our knowledge of shared memory and message queues.
 
 
 ## Team Members:
@@ -24,9 +24,9 @@
  4. Afterward, open a separate terminal window and type `g++ sender.cpp -o sender` & enter
  5. Finally, type `./sender` & enter
  
- *Below is a testing screenshot of when our program compiles:*
+ *Below is a screenshot testing our program when it compiles:*
 
- ![Screenshot of Testing](scshex.png "Testing Example")
+ **![Screenshot of Testing](scshex.png "Testing Example")**
 
 
 ## Contributions
@@ -36,3 +36,4 @@
  * **Michelle Pham** - worked on documentation & other code
  * **Natalia Garcia** - worked on `README.md` file & other code
 
+__________________________________________________________________
