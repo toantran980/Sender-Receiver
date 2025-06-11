@@ -43,8 +43,6 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 		exit(-1);
 	}
 
-	cout << "Initializing sender with key: " << key << endl;
-
 	/* TODO: Get the id of the shared memory segment. The size of the segment must be SHARED_MEMORY_CHUNK_SIZE */
 	/* TODO: Attach to the shared memory */
 	/* TODO: Attach to the message queue */

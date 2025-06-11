@@ -96,7 +96,6 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 		perror("msgget");
 		exit(-1);
 	}
-	cout << "Receiver initialized with key: " << key << endl;
 	
 	/* TODO: Store the IDs and the pointer to the shared memory region in the corresponding parameters */
 }
