@@ -35,7 +35,7 @@
 
 ## Contributions
 
- * **Toan Tran** - worked on `sender.cpp` and `recv.cpp`, created `.txt` and `Makefile`, & testing
+ * **Toan Tran** - worked on `sender.cpp` and `recv.cpp`, created `.txt`, & testing
  * **Hyndavi Teegela** - worked on `sender.cpp`, `recv.cpp` & documentation
  * **Michelle Pham** - worked on documentation & other code
  * **Natalia Garcia** - worked on `README.md` file & other code
