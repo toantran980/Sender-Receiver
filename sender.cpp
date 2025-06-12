@@ -47,7 +47,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	/* TODO: Attach to the shared memory */
 	/* TODO: Attach to the message queue */
 	/* Store the IDs and the pointer to the shared memory region in the corresponding function parameters */
-	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, S_IRUSR | S_IWUSR | IPC_CREAT);
+	shmid = shmget(key, SHARED_MEMORY_CHUNK_SIZE, S_IRUSR | S_IWUSR);
 	if (shmid  == -1) 
 	{
 		perror("shmget");

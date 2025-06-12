@@ -1,3 +1,4 @@
+
 #include <sys/shm.h>
 #include <sys/msg.h>
 #include <sys/stat.h>
@@ -90,7 +91,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	}
 	
 	/* TODO: Create a message queue */
-	msqid = msgget(key, S_IRUSR | S_IWUSR);
+	msqid = msgget(key, S_IRUSR | S_IWUSR | IPC_CREAT);
 	if (msqid == -1) 
 	{
 		perror("msgget");
