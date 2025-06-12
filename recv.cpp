@@ -83,7 +83,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	}
 	
 	/* TODO: Attach to the shared memory */
-	sharedMemPtr = shmat(shmid, NULL, 0);
+	sharedMemPtr = (char*)shmat(shmid, NULL, 0);
 	if (sharedMemPtr == (void*)-1) 
 	{
 		perror("shmat");

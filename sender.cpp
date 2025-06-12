@@ -54,7 +54,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 		exit(-1);
 	}
 
-	sharedMemPtr = shmat(shmid, NULL, 0);
+	sharedMemPtr = (char*)shmat(shmid, NULL, 0);
 	if (sharedMemPtr == (void*)-1) 
 	{
 		perror("shmat");
