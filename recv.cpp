@@ -90,7 +90,7 @@ void init(int& shmid, int& msqid, void*& sharedMemPtr)
 	}
 	
 	/* TODO: Create a message queue */
-	msqid = msgget(key, S_IRUSR | S_IWUSR | IPC_CREAT);
+	msqid = msgget(key, S_IRUSR | S_IWUSR);
 	if (msqid == -1) 
 	{
 		perror("msgget");
