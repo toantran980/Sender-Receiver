@@ -36,7 +36,8 @@ string recvFileName()
 	fileNameMsg fileNameMessage;
 
         /* TODO: Receive the file name using msgrcv() */
-	if (msgrcv(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), FILE_NAME_TRANSFER_TYPE, 0) == -1) {
+	if (msgrcv(msqid, &fileNameMessage, sizeof(fileNameMsg) - sizeof(long), FILE_NAME_TRANSFER_TYPE, 0) == -1) 
+	{
 		perror("msgrcv");
 		exit(-1);
 	}
