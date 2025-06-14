@@ -247,7 +247,11 @@ int main(int argc, char** argv)
  	 * queue and the shared memory segment before exiting. You may add 
 	 * the cleaning functionality in ctrlCSignal().
  	 */
-	signal(SIGINT, ctrlCSignal); 
+	if (signal(SIGINT, ctrlCSignal) == SIG_ERR)
+	{
+		perror("signal");
+		exit(-1);
+	} 
 			
 	/* Initialize */
 	init(shmid, msqid, sharedMemPtr);
