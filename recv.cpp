@@ -241,7 +241,6 @@ void ctrlCSignal(int signal)
 {
 	/* Free system V resources */
 	cleanUp(shmid, msqid, sharedMemPtr);
-	cout << "Cleaned up resources and exiting." << endl;
 	exit(0);
 }
 
