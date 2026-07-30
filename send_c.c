@@ -1,9 +1,6 @@
 // Tran, Toan
-// Teegela, Hyndavi 
-// Pham, Michelle
-// Garcia, Natalia 
 // Sender & Receiver - Interprocess Communication (Message Queues and Shared Memory)
-// C version
+// Refractor C version
 
 #include <sys/shm.h>
 #include <sys/msg.h>
