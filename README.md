@@ -4,7 +4,7 @@ An implementation of two programs — `sender.cpp` and `recv.cpp` — that synch
 
 The sender reads a file in chunks, writes each chunk into a shared memory segment, and notifies the receiver via a message queue. The receiver reads the chunk from shared memory, saves it to a new file (appended with `__recv`), and sends an acknowledgment back. This handshake repeats until the entire file is transferred.
 
-- **Programming Language**: C++
+- **Programming Language**: C++/C
 - **IPC Mechanisms**: System V Shared Memory (`shmget`/`shmat`) and Message Queues (`msgget`/`msgsnd`/`msgrcv`)
 - **Synchronization**: Message-based handshake (sender waits for receiver's acknowledgment after each chunk)
 
