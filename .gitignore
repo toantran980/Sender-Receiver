@@ -1,0 +1,5 @@
+*.pdf
+*.vscode
+*.cpp
+*.hpp
+*.o

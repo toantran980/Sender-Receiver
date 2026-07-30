@@ -1,17 +1,38 @@
-all:	sender recv
+CC       = gcc
+CXX      = g++
+CFLAGS   = -Wall -Wextra -g
+CXXFLAGS = -Wall -Wextra -g
+TARGETS  = sender recv send_c recv_c
 
-sender:	sender.o
-	g++ sender.o -o sender
+.PHONY: all clean
 
-recv:	recv.o
-	g++ recv.o -o recv
+all: $(TARGETS)
 
-sender.o:	 sender.cpp
-	g++ -c sender.cpp
+# C++ targets
+sender: sender.o
+	$(CXX) $(CXXFLAGS) $< -o $@
 
-recv.o:	recv.cpp
-	g++ -c recv.cpp
+recv: recv.o
+	$(CXX) $(CXXFLAGS) $< -o $@
 
+sender.o: sender.cpp msg.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+recv.o: recv.cpp msg.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# C targets
+send_c: send_c.o
+	$(CC) $(CFLAGS) $< -o $@
+
+recv_c: recv_c.o
+	$(CC) $(CFLAGS) $< -o $@
+
+send_c.o: send_c.c msg.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+recv_c.o: recv_c.c msg.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf *.o sender recv 
+	$(RM) *.o $(TARGETS)

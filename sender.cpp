@@ -2,8 +2,7 @@
 // Teegela, Hyndavi 
 // Pham, Michelle
 // Garcia, Natalia 
-// CPSC 351-01 10882 Summer 2025
-// Project 1: Sender & Receiver - Interprocess Communication (Message Queues and Shared Memory)
+// Sender & Receiver - Interprocess Communication (Message Queues and Shared Memory)
 
 #include <sys/shm.h>
 #include <sys/msg.h>

@@ -1,3 +1,8 @@
+#ifndef MSG_H
+#define MSG_H
+
+#include <stdio.h>
+
 #define MAX_MSG_PAYLOAD 100
 
 /* The information type */
@@ -24,15 +29,6 @@ struct fileNameMsg
 	
 	/* The name of the file */
 	char fileName[MAX_FILE_NAME_SIZE];
-	
-	/**
- 	 * Prints the structure
- 	 * @param fp - the file stream to print to
- 	 */
-	void print(FILE* fp)
-	{
-		fprintf(fp, "%ld %s\n", mtype, fileName);
-	}
 };
 
 /**
@@ -41,7 +37,6 @@ struct fileNameMsg
  * the number of bytes in the shared memory segment 
  * that are ready to read. 
  */
-
 struct message
 {
 	/* The message type */
@@ -49,15 +44,6 @@ struct message
 	
 	/* How many bytes in the message */
 	int size;
-	
-	/**
- 	 * Prints the structure
- 	 * @param fp - the file stream to print to
- 	 */
-	void print(FILE* fp)
-	{
-		fprintf(fp, "%ld %d", mtype, size);
-	}
 };
 
 /* Struct representing the message sent from the receiver
@@ -68,14 +54,6 @@ struct ackMessage
 {
 	/* The type of message */
 	long mtype;
-	
-	/**
- 	 * Prints the structure
- 	 * @param fp - the file stream to print to
- 	 */
-	
-	void print(FILE* fp)
-	{
-		fprintf(fp, "%ld\n", mtype);
-	}
 };
+
+#endif /* MSG_H */
